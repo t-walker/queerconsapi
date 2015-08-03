@@ -1,33 +1,9 @@
-<?php
-
-  //--------------------------------------------------------------------------
-  // Example php script for fetching data from mysql database
-  //--------------------------------------------------------------------------
-  $host = ""; //JASON CHANGE
-  $user = ""; //JASON CHANGE
-  $pass = ""; //JASON CHANGE
-
-  $databaseName = "queercon"; //JASON CHANGE
-  $tableName = "news";
-
-  //--------------------------------------------------------------------------
-  // 1) Connect to mysql database
-  //--------------------------------------------------------------------------
-  include 'DB.php';
-  $con = mysql_connect($host,$user,$pass);
-  $dbs = mysql_select_db($databaseName, $con);
-
-  //--------------------------------------------------------------------------
-  // 2) Query database for data
-  //--------------------------------------------------------------------------
-  $result = mysql_query("SELECT * FROM $tableName");          //query
-  $jsonData = array();
-  while ($array = mysql_fetch_row($result)) {
-      $jsonData[] = $array;
-  }
-?>
-
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script>
+  var my_json =
+  $.getJSON("http://127.0.0.1/backend.php", function(json) {
+    var my_json = json;
+  });
 
   function add(txt) {
     var x = document.getElementById("nt-example1");
@@ -36,27 +12,6 @@
     newText = document.createTextNode(txt);
     newLI.appendChild(newText);
     x.appendChild(newLI);
-  }
-
-  function sqlToJsDate(sqlDate){
-      //sqlDate in SQL DATETIME format ("yyyy-mm-dd hh:mm:ss.ms")
-      var sqlDateArr1 = sqlDate.split("-");
-      //format of sqlDateArr1[] = ['yyyy','mm','dd hh:mm:ms']
-      var sYear = sqlDateArr1[0];
-      var sMonth = (Number(sqlDateArr1[1]) - 1).toString();
-      var sqlDateArr2 = sqlDateArr1[2].split(" ");
-      //format of sqlDateArr2[] = ['dd', 'hh:mm:ss.ms']
-      var sDay = sqlDateArr2[0];
-      var sqlDateArr3 = sqlDateArr2[1].split(":");
-      //format of sqlDateArr3[] = ['hh','mm','ss.ms']
-      var sHour = sqlDateArr3[0];
-      var sMinute = sqlDateArr3[1];
-      var sqlDateArr4 = sqlDateArr3[2].split(".");
-      //format of sqlDateArr4[] = ['ss','ms']
-      var sSecond = sqlDateArr4[0];
-      var sMillisecond = sqlDateArr4[1];
-
-      return new Date(sYear,sMonth,sDay,sHour,sMinute,sSecond);
   }
 </script>
 
@@ -94,26 +49,16 @@
 		                <ul id="nt-example1">
                       <script>
                       newLI = document.createElementNS(null,"li");
-
-                      var data = <?php echo json_encode($jsonData, JSON_FORCE_OBJECT); ?>;
                       var row = document.getElementById("nt-example1")
-                      var length = Object.keys(data).length
-                      for(i = 0; i < length; i++) {
-                        var start = sqlToJsDate(data[i][0]);
-                        console.log(start)
-                        var end   = sqlToJsDate(data[i][1]);
-                        console.log(end)
-                        var now = Date.now();
-                        console.log(now);
-                        console.log(start < now && now < end );
-                        if (start < now && now < end )
-                          {
-                            var out = "";
-                            out += data[i][2];
-                            out += ": ";
-                            out += data[i][3] + " ";
-                            add(out);
-                          }
+
+                      var data = my_json.responseJSON
+
+                      for(i = 0; i < data.length; i++) {
+                          var out = "";
+                          out += data[i][2];
+                          out += ": ";
+                          out += data[i][3] + " ";
+                          add(out);
                         }
                       </script>
 		                </ul>
