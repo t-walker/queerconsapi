@@ -2,11 +2,11 @@
 //--------------------------------------------------------------------------
 // Example php script for fetching data from mysql database
 //--------------------------------------------------------------------------
-$host = ""; //JASON CHANGE
-$user = ""; //JASON CHANGE
-$pass = ""; //JASON CHANGE
+$host = "localhost"; //JASON CHANGE
+$user = "root"; //JASON CHANGE
+$pass = "password"; //JASON CHANGE
 
-$databaseName = "queercon"; //JASON CHANGE
+$databaseName = "queercon"; //JASON CHANGE queercon -> database name
 $tableName = "news";
 
 //--------------------------------------------------------------------------
@@ -27,4 +27,5 @@ while ($array = mysql_fetch_row($result)) {
 $data = $jsonData;
 header('Content-Type: application/json');
 echo json_encode($data);
+mysqli_close($link);
 ?>
